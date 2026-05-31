@@ -1364,7 +1364,7 @@ function openCalculator(){
   const pathway = (state.pathway && state.pathway !== 'standard') ? state.pathway : null;
   if (pathway) params.set('pathway', pathway);
 
-  params.set('assocBranches',   parseInt($('#totalBranches').value) || state.tier);
+  params.set('assocBranches',   state.tier);
   params.set('networkBranches', state.donorBranches);
 
   window.open('PM_YMCA_Branch_Calculator_v2.html?' + params.toString(), '_blank');
