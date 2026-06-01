@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  BOARD SUMMARY — one-page leave-behind for a YMCA branch's board / finance
+  committee. Designed to be opened from Step 8 of the Next Steps tool, then
+  printed or saved as a PDF and carried into the approval meeting.
+
+  WHY IT LOOKS DIFFERENT FROM THE MAIN TOOL:
+  The interactive tool is dark because it's a screen experience. A board
+  packet is meant to be PRINTED and read on paper, so this page is a clean,
+  ink-friendly white document. It still feels on-brand through the copper and
+  navy accents and the wordmark.
+
+  HOW TO USE — fill in the 6 highlighted blanks, then send:
+    1. [BRANCH NAME]        – e.g., Copley-Price YMCA
+    2. [PATHWAY]            – e.g., Branch Pays Outright
+    3. [DISCOUNT]           – e.g., 15%
+    4. [YOUR 3-YEAR TOTAL]  – the number shown in Step 7 of the tool, e.g., $255,000
+    5. [BOARD MEETING DATE] – e.g., June 18
+    6. [DATE]               – today's date
+
+  Every blank is wrapped in <span class="fill"> so it's easy to spot.
+  Optional: replace the text wordmark with your logo where marked.
+  ============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Board Summary · Music at the Y</title>
+<style>
+  /* ---- Brand palette (matches the main tool's accents) ---- */
+  :root{
+    --ink:#1c1917;        /* near-black text            */
+    --muted:#6b7280;      /* secondary text             */
+    --line:#e7e5e4;       /* hairlines                  */
+    --copper:#B87333;     /* PM accent (money/headline) */
+    --navy:#355E8D;       /* PM primary                 */
+    --teal:#0f766e;       /* "positive / proof" accent  */
+    --paper:#f5f4f2;      /* page background            */
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .sheet{
+    max-width:820px;
+    margin:28px auto;
+    background:#fff;
+    border:1px solid var(--line);
+    border-top:6px solid var(--copper);
+    border-radius:10px;
+    box-shadow:0 10px 40px rgba(0,0,0,.07);
+    padding:38px 44px 30px;
+  }
+
+  /* ---- Header ---- */
+  .head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .wordmark{font-weight:800;letter-spacing:.04em;color:var(--copper);font-size:15px;}
+  .wordmark span{color:var(--navy);}
+  .doc-tag{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);text-align:right;}
+
+  h1{font-size:26px;line-height:1.15;margin:22px 0 6px;font-weight:800;}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 20px;}
+
+  /* ---- Section scaffolding ---- */
+  .label{font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--copper);font-weight:700;margin-bottom:6px;}
+  .section{margin-top:22px;}
+  hr{border:0;border-top:1px solid var(--line);margin:24px 0;}
+
+  /* ---- The decision box ---- */
+  .decision{
+    background:linear-gradient(135deg, rgba(184,115,51,.07), rgba(53,94,141,.06));
+    border:1px solid rgba(184,115,51,.30);
+    border-radius:10px;
+    padding:18px 20px;
+  }
+  .decision .big{font-size:17px;font-weight:700;line-height:1.4;}
+
+  /* ---- The model: three phases ---- */
+  .phases{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px;}
+  .phase{border:1px solid var(--line);border-radius:9px;padding:13px 14px;background:#fafafa;}
+  .phase .yr{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+  .phase .amt{font-size:20px;font-weight:800;color:var(--teal);margin-top:3px;}
+  .phase .amt.copper{color:var(--copper);}
+  .phase .d{font-size:11px;color:var(--muted);margin-top:5px;}
+
+  /* ---- Proof stats ---- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px;}
+  .stat .n{font-size:23px;font-weight:800;color:var(--teal);}
+  .stat .t{font-size:11px;color:var(--muted);margin-top:3px;}
+  .quote{border-left:3px solid var(--teal);padding:4px 0 4px 14px;margin-top:14px;font-style:italic;color:#292524;font-size:13.5px;}
+  .quote cite{display:block;font-style:normal;color:var(--muted);font-size:11px;margin-top:5px;}
+  .cred{font-size:11.5px;color:var(--muted);margin-top:12px;}
+
+  /* ---- The numbers ---- */
+  .numbers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:6px;}
+  .num{border:1px solid var(--line);border-radius:9px;padding:13px 14px;text-align:center;}
+  .num .k{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+  .num .v{font-size:21px;font-weight:800;margin-top:4px;}
+  .num.hl{background:rgba(184,115,51,.06);border-color:rgba(184,115,51,.30);}
+  .num.hl .v{color:var(--copper);}
+  .cadence{font-size:12px;color:#44403c;margin-top:12px;}
+  .cadence b{color:var(--ink);}
+
+  /* ---- Bullets ---- */
+  ul.tight{margin:8px 0 0;padding-left:18px;}
+  ul.tight li{font-size:13px;margin-bottom:5px;color:#292524;}
+
+  /* ---- Footer / ask ---- */
+  .ask{margin-top:24px;border-top:2px solid var(--copper);padding-top:16px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .ask .who{font-size:12px;color:var(--muted);}
+  .ask .who b{color:var(--ink);font-size:13px;}
+
+  /* ---- Fill-in blanks ---- */
+  .fill{background:#fbeee0;border-bottom:1px dashed var(--copper);padding:0 4px;border-radius:3px;font-weight:700;color:#8a4d1f;}
+
+  /* ---- Print button + print rules ---- */
+  .toolbar{max-width:820px;margin:18px auto 0;text-align:right;}
+  .printbtn{
+    background:var(--copper);color:#fff;border:0;border-radius:8px;
+    padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;
+  }
+  @media print{
+    body{background:#fff;}
+    .no-print{display:none !important;}
+    .sheet{margin:0;border:0;border-top:5px solid var(--copper);box-shadow:none;border-radius:0;padding:12px 16px;}
+    @page{margin:0.3in;}
+
+    /* Fix decision box — overlapping rgba gradients render too dark in print */
+    .decision{background:#fdf5ec !important;border-color:rgba(184,115,51,.25) !important;}
+
+    /* Typography — reduce sizes just enough to land on one page */
+    h1{font-size:21px !important;margin:12px 0 4px !important;}
+    .sub{font-size:12.5px !important;margin:0 0 10px !important;}
+    .decision{padding:10px 12px !important;}
+    .decision .big{font-size:14.5px !important;line-height:1.35 !important;}
+    .label{font-size:10.5px !important;margin-bottom:3px !important;}
+    .section{margin-top:12px !important;}
+    hr{margin:10px 0 !important;}
+
+    .phases{gap:7px !important;margin-top:5px !important;}
+    .phase{padding:8px 9px !important;}
+    .phase .yr{font-size:10.5px !important;}
+    .phase .amt{font-size:16px !important;margin-top:2px !important;}
+    .phase .d{font-size:11px !important;margin-top:3px !important;}
+
+    .stats{gap:7px !important;margin-top:4px !important;}
+    .stat .n{font-size:19px !important;}
+    .stat .t{font-size:11.5px !important;}
+    .quote{font-size:12px !important;margin-top:8px !important;padding:3px 0 3px 10px !important;}
+    .cred{font-size:11px !important;margin-top:7px !important;}
+
+    .numbers{gap:7px !important;margin-top:5px !important;}
+    .num{padding:8px 9px !important;}
+    .num .k{font-size:10.5px !important;}
+    .num .v{font-size:18px !important;margin-top:2px !important;}
+    .cadence{font-size:11.5px !important;margin-top:7px !important;}
+
+    ul.tight{margin:4px 0 0 !important;}
+    ul.tight li{font-size:12.5px !important;margin-bottom:2px !important;}
+
+    .ask{margin-top:10px !important;padding-top:8px !important;}
+    .ask .who{font-size:12px !important;}
+    .ask .who b{font-size:13px !important;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="toolbar no-print">
+    <button class="printbtn" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <div class="sheet">
+
+    <!-- HEADER -->
+    <div class="head">
+      <!-- Optional: replace this wordmark with <img src="logo.png" height="26"> -->
+      <div class="wordmark">PRACTICING MUSICIAN <span>× YMCA</span></div>
+      <div class="doc-tag">Board Summary<br/><span class="fill">[DATE]</span></div>
+    </div>
+
+    <h1>Music at <span class="fill">[BRANCH NAME]</span> — what we're asking the board to approve.</h1>
+    <p class="sub">A one-time, three-year investment that leaves the branch running a self-funding music program. No annual fundraising after onboarding.</p>
+
+    <!-- THE DECISION -->
+    <div class="decision">
+      <div class="label" style="color:var(--navy)">The decision in one sentence</div>
+      <div class="big">
+        Approve a <span class="fill">[PATHWAY]</span> investment of
+        <span class="fill">[YOUR 3-YEAR TOTAL]</span> over three years
+        (a <span class="fill">[DISCOUNT]</span> discount off the standard $300,000)
+        to launch music at <span class="fill">[BRANCH NAME]</span> and make it self-sustaining by Year&nbsp;4.
+      </div>
+    </div>
+
+    <!-- THE MODEL -->
+    <div class="section">
+      <div class="label">The model · one commitment, permanent impact</div>
+      <div class="phases">
+        <div class="phase">
+          <div class="yr">Year 1 · Build &amp; launch</div>
+          <div class="amt">Funded in</div>
+          <div class="d">Onboarding, the 5-week flagship class, full curriculum, and rollout across branch programs.</div>
+        </div>
+        <div class="phase">
+          <div class="yr">Years 2–3 · Sustain</div>
+          <div class="amt">Still funded</div>
+          <div class="d">Curriculum, facilitator support, and platform — while branch revenue ramps up underneath it.</div>
+        </div>
+        <div class="phase">
+          <div class="yr">Year 4 onward</div>
+          <div class="amt copper">Self-sustaining</div>
+          <div class="d">The program runs on its own membership, class, and lesson revenue. No future asks, ever.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- THE PROOF -->
+    <div class="section">
+      <div class="label" style="color:var(--teal)">The proof · we ran a real pilot, we didn't model it</div>
+      <div class="stats">
+        <div class="stat"><div class="n">100%</div><div class="t">of participants wanted to continue</div></div>
+        <div class="stat"><div class="n">89%</div><div class="t">would refer a friend</div></div>
+        <div class="stat"><div class="n">83%</div><div class="t">called music mission-critical for their Y</div></div>
+        <div class="stat"><div class="n">30+</div><div class="t">on the waitlist before the final class</div></div>
+      </div>
+      <div class="quote">
+        “By far the most interest I've ever seen for a first-time program.”
+        <cite>Ann Conway · Adult Programming Director, Copley-Price YMCA — where two volunteers with no teaching experience ran the entire pilot.</cite>
+      </div>
+      <div class="cred">Proven across <b>831 school districts</b> and <b>90+ countries</b> over <b>9 years</b>, with <b>3,500+ recorded lessons</b> — curriculum recorded by professionals, including members of the Seattle Symphony. When San Diego's association approved its LOI, it went from one pilot to <b>ten signed branches in a single week.</b></div>
+    </div>
+
+    <hr/>
+
+    <!-- THE NUMBERS -->
+    <div class="section">
+      <div class="label">The numbers</div>
+      <div class="numbers">
+        <div class="num"><div class="k">Standard 3-year total</div><div class="v">$300,000</div></div>
+        <div class="num"><div class="k">Your discount</div><div class="v"><span class="fill">[DISCOUNT]</span></div></div>
+        <div class="num hl"><div class="k">Your 3-year total</div><div class="v"><span class="fill">[YOUR 3-YEAR TOTAL]</span></div></div>
+      </div>
+      <div class="cadence">
+        <b>$50,000</b> kicks off the flagship at signing (fixed). The remaining balance is paid across Years&nbsp;1–3 on a simple, predictable cadence — never as an open-ended commitment. The detailed tranche schedule is in the live plan your team reviewed.
+      </div>
+    </div>
+
+    <!-- WHAT IT MEANS -->
+    <div class="section">
+      <div class="label">Why this matters for <span style="color:var(--ink)"><span class="fill">[BRANCH NAME]</span></span></div>
+      <ul class="tight">
+        <li><b>Mission.</b> Music is a high-demand, high-retention youth and family program that deepens membership engagement — delivered with the Y's existing space and volunteer base.</li>
+        <li><b>Financial.</b> It is structured to become a revenue source, not a recurring cost line — membership lift, group classes, and lesson commissions fund it from Year&nbsp;4 on.</li>
+        <li><b>Risk.</b> The model is already proven in a live YMCA pilot, and the discount on this pathway is locked in perpetuity.</li>
+      </ul>
+    </div>
+
+    <!-- THE ASK -->
+    <div class="ask">
+      <div class="who">
+        <b>Recommended next step</b><br/>
+        Approve the investment at the <span class="fill">[BOARD MEETING DATE]</span> meeting so onboarding can begin.
+      </div>
+      <div class="who">
+        <b>Casey Klocek</b> · VP, Sales &amp; Partner Relations<br/>
+        casey.klocek@practicingmusician.com · (509) 490-2500
+      </div>
+    </div>
+
+  </div>
+
+<script>
+(function(){
+  var p = new URLSearchParams(location.search);
+  function fillParam(placeholder, value){
+    if (!value) return;
+    document.querySelectorAll('.fill').forEach(function(el){
+      if (el.textContent.trim() === placeholder) el.textContent = value;
+    });
+  }
+  fillParam('[BRANCH NAME]',       p.get('branch'));
+  fillParam('[PATHWAY]',           p.get('pathway'));
+  fillParam('[DISCOUNT]',          p.get('discount'));
+  fillParam('[YOUR 3-YEAR TOTAL]', p.get('total'));
+  fillParam('[BOARD MEETING DATE]', p.get('boardDate'));
+  var today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  fillParam('[DATE]', today);
+})();
+</script>
+</body>
+</html>

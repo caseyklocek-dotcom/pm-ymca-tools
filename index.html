@@ -433,7 +433,7 @@
     <div class="card p-6 md:p-10">
       <div class="text-xs uppercase tracking-widest muted">Step 05 · Stack the discount</div>
       <h2 class="text-2xl font-bold mt-1">Are other branches signing this quarter?</h2>
-      <p class="text-sm muted mt-2">Multi-branch commitments unlock association-wide discounts that <strong style="color:var(--brand-accent)">stack on top of</strong> your pathway choice. The more branches, the more everyone saves.</p>
+      <p class="text-sm muted mt-2">Multi-branch commitments unlock volume discounts that <strong style="color:var(--brand-accent)">stack on top of</strong> your pathway choice — branches from any YMCA association count. The more branches that sign together, the more everyone saves.</p>
 
       <div id="tierGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
         <div class="opt-btn selected" data-tier="1" onclick="selectTier(1)">
@@ -461,7 +461,7 @@
           <span class="kpi font-semibold" id="step5PathwayPct">0%</span>
         </div>
         <div class="ledger-row">
-          <span>Association tier · <span id="step5TierLabel" class="muted">Single branch</span></span>
+          <span>Multi-branch discount · <span id="step5TierLabel" class="muted">Single branch</span></span>
           <span class="kpi font-semibold" id="step5TierPct">+0%</span>
         </div>
         <div class="ledger-row total">
@@ -478,12 +478,12 @@
   <section class="wizard-step" data-step="6">
     <div class="card p-6 md:p-10">
       <div class="text-xs uppercase tracking-widest muted">Step 06 · Donor-network bonus</div>
-      <h2 class="text-2xl font-bold mt-1" id="step6Heading">Will this same donor fund other branches?</h2>
-      <p class="text-sm muted mt-2" id="step6Desc">This bonus only unlocks when <strong style="color:#f8fafc">one donor</strong> commits to funding multiple branches in the same agreement. If your donor is only funding this branch, leave this at 0. If they're willing to fund others as well, slide up — you earn <strong style="color:var(--brand-accent)">+1% per branch they commit to</strong>, up to +10% for 10 branches.</p>
+      <h2 class="text-2xl font-bold mt-1" id="step6Heading">Can your network help fund other branches?</h2>
+      <p class="text-sm muted mt-2" id="step6Desc">This bonus applies to the donor <strong style="color:#f8fafc">you're personally bringing</strong> — and unlocks when that donor commits to funding multiple branches in one agreement. If your donor is only funding this branch, leave this at 0. If they're willing to fund others as well, slide up — you earn <strong style="color:var(--brand-accent)">+1% per branch they commit to</strong>, up to +10% for 10 branches. <strong style="color:#5eead4">Note:</strong> this doesn't affect PM's ability to independently pursue national or foundation donors (like the Gates Foundation) on behalf of any branch — including yours.</p>
 
       <div class="mt-8 soft p-6">
         <div class="flex items-center justify-between mb-4">
-          <label class="text-sm font-semibold">Additional branches this donor will commit to funding</label>
+          <label class="text-sm font-semibold">Additional branches your network will help PM fund</label>
           <span class="kpi text-2xl font-bold" style="color:var(--brand-accent)" id="donorBranchVal">0</span>
         </div>
         <input id="donorBranches" type="range" min="0" max="10" step="1" value="0"/>
@@ -497,7 +497,7 @@
           <span class="kpi font-semibold" id="step6PathwayPct">0%</span>
         </div>
         <div class="ledger-row">
-          <span>Association tier · <span id="step6TierLabel" class="muted">—</span></span>
+          <span>Multi-branch discount · <span id="step6TierLabel" class="muted">—</span></span>
           <span class="kpi font-semibold" id="step6TierPct">+0%</span>
         </div>
         <div class="ledger-row">
@@ -530,7 +530,7 @@
             <span class="kpi font-semibold" id="step7PathwayPct">0%</span>
           </div>
           <div class="ledger-row">
-            <span>Association tier · <span id="step7TierLabel" class="muted">—</span></span>
+            <span>Multi-branch discount · <span id="step7TierLabel" class="muted">—</span></span>
             <span class="kpi font-semibold" id="step7TierPct">+0%</span>
           </div>
           <div class="ledger-row" id="step7DonorRow" style="display:none">
@@ -780,8 +780,15 @@
         </div>
       </div>
 
+      <!-- Board meeting date (feeds the Board Brief) -->
+      <div class="mt-8 no-print" style="border-top:1px solid #3A3532;padding-top:18px">
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Board meeting date <span class="muted" style="text-transform:none;letter-spacing:0">(optional — completes the Board Brief)</span></label>
+        <input id="boardMeetingDate" type="date" class="field focus-ring" style="max-width:280px"/>
+      </div>
+
       <!-- Action buttons -->
-      <div class="mt-8 flex flex-wrap items-center justify-end gap-3 no-print">
+      <div class="mt-4 flex flex-wrap items-center justify-end gap-3 no-print">
+        <button class="btn-ghost" onclick="openBoardBrief()">Board Brief →</button>
         <button class="btn" onclick="buildPrintView();window.print()">Print / Save as PDF</button>
       </div>
     </div>
@@ -831,22 +838,23 @@ const pathwayLabel = p => p === 'outright' ? 'Branch Pays Outright'
 
 function totals(){
   const pPct = pathwayPct(state.pathway);
-  const tPct = tierPct(state.tier);
+  const tPct = state.pathway === 'standard' ? 0 : tierPct(state.tier);
   const dPct = donorBonusPct();
   const totalPct = pPct + tPct + dPct;
-  const tranche2 = TRANCHE_2_BASE * (1 - totalPct);
-  const y1 = TRANCHE_1 + tranche2;
+  const tranche1 = TRANCHE_1;
+  const tranche2 = Y1_TOTAL * (1 - totalPct) - TRANCHE_1;
+  const y1 = tranche1 + tranche2;
   const y2 = YEAR_SUSTAIN * (1 - totalPct);
   const y3 = YEAR_SUSTAIN * (1 - totalPct);
   const total3yr = y1 + y2 + y3;
   const savings = TOTAL_3YR - total3yr;
-  return { pPct, tPct, dPct, totalPct, tranche2, y1, y2, y3, total3yr, savings };
+  return { pPct, tPct, dPct, totalPct, tranche1, tranche2, y1, y2, y3, total3yr, savings };
 }
 
 /* ===================== Step config (visible step order) ===================== */
 function visibleSteps(){
   const branches = parseInt($('#totalBranches').value) || 1;
-  const skip5 = branches <= 1;
+  const skip5 = branches <= 1 || state.pathway === 'standard';
   const skip6 = state.pathway === 'standard';
   const base = [1,2,3,4, ...(skip5 ? [] : [5]), ...(skip6 ? [] : [6]), 7,8];
   return base;
@@ -982,27 +990,15 @@ function renderStep5(){
 }
 function renderStep6(){
   const { pPct, tPct, dPct, totalPct } = totals();
-  const branches = parseInt($('#totalBranches').value) || 1;
   const slider = $('#donorBranches');
-  slider.max = branches;
-  if (state.donorBranches > branches) {
-    state.donorBranches = branches;
-    slider.value = branches;
-    $('#donorBranchVal').textContent = branches;
-  }
-  // Rebuild tick marks — ~10 evenly-spaced labels regardless of total
-  const tickStep = branches <= 10 ? 1 : Math.ceil(branches / 10);
-  const ticks = [];
-  for (let i = 0; i <= branches; i += tickStep) ticks.push(i);
-  if (ticks[ticks.length - 1] !== branches) ticks.push(branches);
-  $('#donorBranchTicks').innerHTML = ticks.map(t => `<span>${t}</span>`).join('');
+  slider.max = 10;
 
   if (state.pathway === 'outright'){
-    $('#step6Heading').textContent = 'Does your network include a donor who can fund other branches?';
-    $('#step6Desc').innerHTML = 'Your branch is paying outright — but if you can connect PM with a donor who commits to funding <strong style="color:#f8fafc">other branches</strong> in the same agreement, you earn <strong style="color:var(--brand-accent)">+1% per branch they commit to</strong>. Leave at 0 if this doesn\'t apply.';
+    $('#step6Heading').textContent = 'Can your network help fund other branches?';
+    $('#step6Desc').innerHTML = 'This bonus rewards your branch for opening your donor network to help fund additional branches — inside your association or beyond it. That could be one donor covering several branches, or warm introductions to multiple donors. Slide up for each additional branch your network helps secure. Leave at 0 if this doesn\'t apply.';
   } else {
-    $('#step6Heading').textContent = 'Will this same donor fund other branches?';
-    $('#step6Desc').innerHTML = 'This bonus only unlocks when <strong style="color:#f8fafc">one donor</strong> commits to funding multiple branches in the same agreement. If your donor is only funding this branch, leave this at 0. If they\'re willing to fund others as well, slide up — you earn <strong style="color:var(--brand-accent)">+1% per branch they commit to</strong>.';
+    $('#step6Heading').textContent = 'Can your network help fund other branches?';
+    $('#step6Desc').innerHTML = 'This bonus rewards your branch for opening your donor network to help fund additional branches — inside your association or beyond it. That could be one donor committing to fund several, or warm introductions to multiple donors. Slide up for each additional branch your network helps secure. Leave at 0 if your donor is only funding this branch.';
   }
   $('#step6PathwayLabel').textContent = pathwayLabel(state.pathway);
   $('#step6PathwayPct').textContent = (pPct*100).toFixed(0) + '%';
@@ -1036,7 +1032,7 @@ function animateCount(startVal, endVal, duration, el, onDone){
 }
 
 function renderStep7(){
-  const { pPct, tPct, dPct, totalPct, tranche2, y2, y3, total3yr, savings } = totals();
+  const { pPct, tPct, dPct, totalPct, tranche1, tranche2, y2, y3, total3yr, savings } = totals();
 
   // Ledger
   $('#step7PathwayLabel').textContent = pathwayLabel(state.pathway);
@@ -1052,8 +1048,8 @@ function renderStep7(){
   }
   $('#step7TotalPct').textContent = (totalPct*100).toFixed(0) + '%';
 
-  // Tranches (static — no animation needed)
-  $('#tranche1').textContent = fmt(TRANCHE_1);
+  // Tranches
+  $('#tranche1').textContent = fmt(tranche1);
   $('#tranche2').textContent = fmt(tranche2);
   $('#tranche3').textContent = fmt(y2);
   $('#tranche4').textContent = fmt(y3);
@@ -1096,7 +1092,8 @@ function renderStep8(){
   $('#finalDiscount').textContent = (totalPct*100).toFixed(0) + '%';
   $('#finalTotal').textContent = fmt(total3yr);
   $('#donorPitchTotal').textContent = fmt(total3yr);
-  $('#outrightTranche1').textContent = fmt(TRANCHE_1);
+  const { tranche1: t1forStep8 } = totals();
+  $('#outrightTranche1').textContent = fmt(t1forStep8);
 
   // show only the correct pathway form
   $$('.pathway-form').forEach(el => el.classList.toggle('active', el.dataset.form === state.pathway));
@@ -1181,7 +1178,7 @@ function copySummary(){
   const totalBranches = $('#totalBranches').value.trim() || '[Unknown]';
   const members     = $('#memberCount').value.trim()     || '[Unknown]';
   const exec        = $('#execName').value.trim()        || '[Executive]';
-  const { pPct, tPct, dPct, totalPct, tranche2, y2, y3, total3yr, savings } = totals();
+  const { pPct, tPct, dPct, totalPct, tranche1, tranche2, y2, y3, total3yr, savings } = totals();
 
   let pathwaySpecific = '';
   if (state.pathway === 'standard'){
@@ -1227,12 +1224,12 @@ function copySummary(){
     'Date: ' + new Date().toLocaleDateString(),
     '',
     'PATHWAY: ' + pathwayLabel(state.pathway),
-    'Association tier: ' + tierLabel(state.tier) + ' (+' + (tPct*100).toFixed(0) + '%)',
+    'Multi-branch discount: ' + tierLabel(state.tier) + ' (+' + (tPct*100).toFixed(0) + '%)',
     state.pathway === 'donor' ? 'Donor-network bonus: ' + state.donorBranches + ' branch' + (state.donorBranches > 1 ? 'es' : '') + ' (+' + (dPct*100).toFixed(0) + '%)' : null,
     'Total discount: ' + (totalPct*100).toFixed(0) + '%',
     '',
     'PAYMENT SCHEDULE:',
-    '  • Tranche 1 (at kickoff): ' + fmt(TRANCHE_1),
+    '  • Tranche 1 (at kickoff): ' + fmt(tranche1),
     '  • Tranche 2 (Month 4): ' + fmt(tranche2),
     '  • Tranche 3 (end of Year 1, prepays Year 2): ' + fmt(y2),
     '  • Tranche 4 (end of Year 2, prepays Year 3): ' + fmt(y3),
@@ -1254,7 +1251,7 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 function pvLi(label, val){ return val ? `<li><strong>${esc(label)}:</strong> ${esc(val)}</li>` : '' }
 
 function buildPrintView(){
-  const { pPct, tPct, dPct, totalPct, tranche2, y2, y3, total3yr, savings } = totals();
+  const { pPct, tPct, dPct, totalPct, tranche1, tranche2, y2, y3, total3yr, savings } = totals();
 
   // Inputs
   const branch   = $('#branchName').value.trim()      || 'Your Branch';
@@ -1298,7 +1295,7 @@ function buildPrintView(){
   $('#pv-total-pct').textContent = (totalPct*100).toFixed(0) + '%';
 
   // Tranches
-  $('#pv-t1').textContent     = fmt(TRANCHE_1);
+  $('#pv-t1').textContent     = fmt(tranche1);
   $('#pv-t2').textContent     = fmt(tranche2);
   $('#pv-t3').textContent     = fmt(y2);
   $('#pv-t4').textContent     = fmt(y3);
@@ -1341,7 +1338,7 @@ function buildPrintView(){
       ${pvLi('Authorized signer',    $('#outrightSigner').value)}
       ${pvLi('Signer email',         $('#outrightSignerEmail').value)}
       ${pvLi('Facilitators to train',  $('#outrightFacilitators').value)}
-      <li>Tranche 1 (${fmt(TRANCHE_1)}) due within 30 days of signing</li>
+      <li>Tranche 1 (${fmt(tranche1)}) due within 30 days of signing</li>
     </ul>`;
   }
   $('#pv-next-label').textContent  = nextLabel;
@@ -1368,6 +1365,26 @@ function openCalculator(){
   params.set('networkBranches', state.donorBranches);
 
   window.open('PM_YMCA_Branch_Calculator_v2.html?' + params.toString(), '_blank');
+}
+
+/* ===================== Open Board Brief ===================== */
+function openBoardBrief(){
+  const { totalPct, total3yr } = totals();
+  const branch    = $('#branchName').value.trim() || '';
+  const pathway   = pathwayLabel(state.pathway);
+  const discount  = (totalPct*100).toFixed(0) + '%';
+  const total     = fmt(total3yr);
+  const boardDateVal = $('#boardMeetingDate').value;
+  const boardDate = boardDateVal
+    ? new Date(boardDateVal + 'T00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+    : '';
+  const params    = new URLSearchParams();
+  if (branch)    params.set('branch', branch);
+  if (boardDate) params.set('boardDate', boardDate);
+  params.set('pathway', pathway);
+  params.set('discount', discount);
+  params.set('total', total);
+  window.open('board-summary(1).html?' + params.toString(), '_blank');
 }
 
 /* ===================== Init ===================== */
@@ -1420,7 +1437,7 @@ renderTracker();
       <span class="pv-pathway-badge" id="pv-pathway-badge">—</span>
       <div>
         <div class="pv-ledger-row"><span>Pathway discount</span><span class="pv-ledger-val" id="pv-pathway-pct">0%</span></div>
-        <div class="pv-ledger-row"><span>Association tier · <span id="pv-tier-lbl" style="color:#999"></span></span><span class="pv-ledger-val" id="pv-tier-pct">+0%</span></div>
+        <div class="pv-ledger-row"><span>Multi-branch discount · <span id="pv-tier-lbl" style="color:#999"></span></span><span class="pv-ledger-val" id="pv-tier-pct">+0%</span></div>
         <div class="pv-ledger-row" id="pv-donor-row"><span>Donor-network bonus · <span id="pv-donor-lbl" style="color:#999"></span></span><span class="pv-ledger-val" id="pv-donor-pct">+0%</span></div>
         <div class="pv-ledger-row pv-total"><span>Total discount applied</span><span class="pv-ledger-val" style="color:#B87333" id="pv-total-pct">0%</span></div>
       </div>
@@ -1470,6 +1487,28 @@ renderTracker();
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Three-phase model -->
+  <div class="pv-card" style="margin-bottom:10px">
+    <div class="pv-section-label">The Model · One Commitment, Permanent Impact</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#999">Year 1 · Build &amp; launch</div>
+        <div style="font-size:13px;font-weight:800;color:#1B2F4E;margin-top:3px">Funded in</div>
+        <div style="font-size:9px;color:#666;margin-top:4px">Onboarding, the 5-week flagship class, full curriculum, and rollout across branch programs.</div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#999">Years 2–3 · Sustain</div>
+        <div style="font-size:13px;font-weight:800;color:#1B2F4E;margin-top:3px">Still funded</div>
+        <div style="font-size:9px;color:#666;margin-top:4px">Curriculum, facilitator support, and platform — while branch revenue ramps up underneath it.</div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#999">Year 4 onward</div>
+        <div style="font-size:13px;font-weight:800;color:#B87333;margin-top:3px">Self-sustaining</div>
+        <div style="font-size:9px;color:#666;margin-top:4px">The program runs on its own membership, class, and lesson revenue. No future asks, ever.</div>
+      </div>
+    </div>
   </div>
 
   <!-- Next steps (pathway-specific) -->
