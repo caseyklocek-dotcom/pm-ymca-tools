@@ -104,7 +104,7 @@
   input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:999px;background:var(--brand-accent);border:2px solid #1B1715;cursor:pointer}
 
   /* Journey stepper (full-journey, not wizard) */
-  .stepper{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:flex-start;position:relative;padding:8px 0}
+  .stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:0;align-items:flex-start;position:relative;padding:8px 0}
   .step{display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;text-align:center;padding:0 8px}
   .step-dot{width:38px;height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#1B1715;border:2px solid #3A3532;color:#6B7280;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;transition:all .25s}
   .step-dot.done{background:rgba(94,234,212,.12);border-color:#5eead4;color:#5eead4}
@@ -155,15 +155,15 @@
   #printView { display:none }
 
   @media print {
-    @page { margin:.55in }
+    @page { size:letter portrait; margin:.5in }
     /* Hide wizard UI */
     .progress-bar, header, main, #wizardNav { display:none !important }
-    /* Show print view — constrained to page width in print units */
-    #printView { display:block !important; box-sizing:border-box }
+    /* Pin print view to paper's printable width (8.5in − 2×0.5in = 7.5in) */
+    #printView { display:block !important; box-sizing:border-box; width:7.5in; max-width:7.5in }
     html, body {
       background:#fff !important; color:#111 !important;
       font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif !important;
-      font-size:10pt; margin:0; padding:0;
+      font-size:10pt; margin:0; padding:0; width:100%;
     }
     *, *::before, *::after {
       -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;
@@ -177,6 +177,7 @@
 
     /* ── Hero band ── */
     .pv-hero { background:#1B2F4E !important; border-radius:8px; padding:18px 22px; display:flex; justify-content:space-between; align-items:center; margin-bottom:13px; gap:16px }
+    .pv-hero-left { min-width:0; flex:1 1 auto }
     .pv-hero-left h1 { font-size:16px; font-weight:800; color:#f8fafc !important; margin:0 0 3px; line-height:1.2 }
     .pv-hero-left p { font-size:9px; color:#93c5fd !important; margin:2px 0 0 }
     .pv-hero-right { text-align:right; flex-shrink:0 }
@@ -187,6 +188,7 @@
     /* ── Grid ── */
     .pv-grid { display:grid; gap:10px; margin-bottom:10px }
     .pv-grid-2 { grid-template-columns:1fr 1fr }
+    .pv-grid > * { min-width:0 }
 
     /* ── Cards ── */
     .pv-card { background:#f5f7fa !important; border-radius:6px; padding:11px 13px; break-inside:avoid }
@@ -210,9 +212,9 @@
     .pv-ledger-val { font-weight:600; font-variant-numeric:tabular-nums }
 
     /* ── Tranche table ── */
-    .pv-tranche-table { width:100%; border-collapse:collapse }
-    .pv-tranche-table th { background:#1B2F4E !important; color:#fff !important; font-size:8.5px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; padding:7px 9px; text-align:left }
-    .pv-tranche-table td { padding:6px 9px; font-size:9.5px; border-bottom:1px solid #e5e7eb }
+    .pv-tranche-table { width:100%; border-collapse:collapse; table-layout:fixed }
+    .pv-tranche-table th { background:#1B2F4E !important; color:#fff !important; font-size:8.5px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; padding:7px 9px; text-align:left; word-wrap:break-word; overflow-wrap:break-word }
+    .pv-tranche-table td { padding:6px 9px; font-size:9.5px; border-bottom:1px solid #e5e7eb; word-wrap:break-word; overflow-wrap:break-word }
     .pv-tranche-table td.right { text-align:right; font-variant-numeric:tabular-nums; font-weight:600 }
     .pv-tranche-table tr.pv-total-row td { background:#1B2F4E !important; color:#fff !important; font-weight:700; border:none }
     .pv-tranche-table tr.pv-total-row td.right { color:#B87333 !important; font-size:12px }
@@ -271,7 +273,7 @@
       You signed the LOI.<br/>
       <span style="color:var(--brand-accent)">Now let's get music in your branch.</span>
     </h1>
-    <p class="mt-4 text-slate-300 max-w-2xl mx-auto">A guided walk-through of your pathway, your discount, your payment schedule, and our shared 3-year commitment to make your branch self-sufficient.</p>
+    <p class="mt-4 text-slate-300 max-w-2xl mx-auto">A guided walk-through of your pathway, your discount, your payment schedule, and our 3-year partnership plan to help your branch build a lasting music program.</p>
   </div>
 </header>
 
@@ -328,7 +330,7 @@
         </div>
         <span class="pill">You are here</span>
       </div>
-      <p class="text-sm muted mt-2">Here's the full 3-year arc from LOI to self-sufficiency. Today is stage 2.</p>
+      <p class="text-sm muted mt-2">Here's the full 3-year arc from LOI to a thriving branch music program. Today is stage 2.</p>
 
       <div class="mt-10 mb-6">
         <div class="stepper">
@@ -336,14 +338,13 @@
           <div class="step current"><div class="step-dot">2</div><div class="step-label">Pathway Selected</div><div class="step-sub">Today's meeting</div></div>
           <div class="step"><div class="step-dot">3</div><div class="step-label">Onboarding</div><div class="step-sub">Months 1–3</div></div>
           <div class="step"><div class="step-dot">4</div><div class="step-label">Full Rollout</div><div class="step-sub">Months 4–12</div></div>
-          <div class="step"><div class="step-dot">5</div><div class="step-label">Self-Sufficient</div><div class="step-sub">End of Year 3</div></div>
         </div>
       </div>
 
       <div class="mt-8 p-5 rounded-2xl" style="background:linear-gradient(135deg, rgba(94,234,212,.05), rgba(184,115,51,.05));border:1px solid rgba(94,234,212,.25)">
-        <div class="text-xs uppercase tracking-widest" style="color:#5eead4">Our commitment</div>
-        <div class="text-lg font-bold mt-1">By the end of Year 3, you'll never have to raise another donor dollar for music at your branch.</div>
-        <div class="text-sm muted mt-1">We build the membership revenue, group classes, and lesson commissions inside your branch so the program funds itself.</div>
+        <div class="text-xs uppercase tracking-widest" style="color:#5eead4">Our Intent</div>
+        <div class="text-lg font-bold mt-1">By the end of Year 3, we'll give your branch a customized plan and the tools to sustain this program long-term.</div>
+        <div class="text-sm muted mt-1">We provide the guidance, the curriculum, and the revenue framework. How your branch puts it to work is yours to decide.</div>
       </div>
     </div>
   </section>
@@ -371,14 +372,14 @@
         <div class="soft p-5">
           <div class="text-xs uppercase tracking-widest muted">Year 3 · Sustain</div>
           <div class="kpi text-3xl font-extrabold mt-1" style="color:#f8fafc">$65,000</div>
-          <div class="text-xs muted mt-2">Same as Year 2. By the end of this year, your branch is self-sufficient.</div>
+          <div class="text-xs muted mt-2">Same as Year 2. By this point, your branch has the tools and framework to sustain the program.</div>
         </div>
       </div>
 
       <div class="mt-8 p-6 rounded-2xl flex items-center justify-between flex-wrap gap-4" style="background:linear-gradient(135deg, rgba(184,115,51,.06), rgba(53,94,141,.06));border:1px solid rgba(184,115,51,.25)">
         <div>
           <div class="text-xs uppercase tracking-widest" style="color:var(--brand-accent)">Standard 3-Year Total</div>
-          <div class="text-sm muted mt-1">Before any discounts. We'll bring this down together.</div>
+          <div class="text-sm muted mt-1">Before any discounts.</div>
         </div>
         <div class="kpi text-4xl font-extrabold" style="color:var(--brand-accent)">$300,000</div>
       </div>
@@ -408,7 +409,7 @@
           <span class="badge">10% Discount</span>
           <div class="text-lg font-bold mt-3" style="color:#f8fafc">Donor-Raised in Your Network</div>
           <div class="text-xs muted mt-1">You bring the donor.</div>
-          <div class="text-sm mt-3 text-slate-300">A donor from your network funds Years 1–3. Launch as soon as the donor commits. <strong style="color:#5eead4">10% off — in perpetuity.</strong></div>
+          <div class="text-sm mt-3 text-slate-300">A donor from your network funds Years 1–3. Launch as soon as the donor commits. <strong style="color:#5eead4">10% off — for the life of the contract.</strong></div>
         </div>
 
         <div class="path-card" data-pathway="outright" onclick="selectPathway('outright')">
@@ -416,7 +417,7 @@
           <span class="badge">15% Discount · Best Value</span>
           <div class="text-lg font-bold mt-3" style="color:#f8fafc">Branch Pays Outright</div>
           <div class="text-xs muted mt-1">Branch funds directly. Fastest launch.</div>
-          <div class="text-sm mt-3 text-slate-300">Branch covers Years 1–3 from operating budget or reserves. <strong style="color:#5eead4">15% off — in perpetuity.</strong></div>
+          <div class="text-sm mt-3 text-slate-300">Branch covers Years 1–3 from operating budget or reserves. <strong style="color:#5eead4">15% off — for the life of the contract.</strong></div>
         </div>
       </div>
 
@@ -584,13 +585,13 @@
             <tr>
               <td><strong>Tranche 4</strong><div class="text-[11px] muted">Year 3 prepay</div></td>
               <td>End of Year 2</td>
-              <td>Year 3 sustain — final guided year before self-sufficiency.</td>
+              <td>Year 3 sustain — final guided year of the partnership.</td>
               <td class="right kpi" id="tranche4">$65,000</td>
             </tr>
             <tr class="total-row">
               <td><strong>3-Year Total</strong></td>
               <td>—</td>
-              <td>Then nothing. Your branch runs the program on its own revenue.</td>
+              <td>Completes your 3-year guided partnership with Practicing Musician.</td>
               <td class="right kpi" id="trancheTotal">$300,000</td>
             </tr>
           </tbody>
@@ -601,8 +602,8 @@
       <div class="tease-card mt-8">
         <div class="grid md:grid-cols-5 gap-6 items-center">
           <div class="md:col-span-3">
-            <div class="text-xs uppercase tracking-widest" style="color:#5eead4;letter-spacing:.08em">✦ Why Year-3 self-sufficiency isn't just a slogan</div>
-            <h3 class="text-xl font-bold mt-2" style="color:#f8fafc">Want to see how your branch builds the revenue to fund itself?</h3>
+            <div class="text-xs uppercase tracking-widest" style="color:#5eead4;letter-spacing:.08em">✦ See the revenue potential for your branch</div>
+            <h3 class="text-xl font-bold mt-2" style="color:#f8fafc">Want to see how the PM partnership generates revenue at your branch?</h3>
             <p class="text-sm text-slate-300 mt-2">Our Branch Revenue Calculator models membership lift, group classes, and lesson commissions — customized to <span id="teaseBranchName" class="font-semibold" style="color:#5eead4">your branch</span>.</p>
           </div>
           <div class="md:col-span-2 text-center md:text-right">
@@ -644,8 +645,8 @@
       <div class="pathway-form mt-8" data-form="standard">
         <div class="commit-card">
           <div class="text-xs uppercase tracking-widest" style="color:#5eead4">Your standard rollout · what we owe YOU</div>
-          <h3 class="text-xl font-bold mt-1">Practicing Musician will start fundraising this week.</h3>
-          <p class="text-sm muted mt-2">You don't owe anything. Here's how we'll keep you in the loop while we work the donor list.</p>
+          <h3 class="text-xl font-bold mt-1">Practicing Musician will start the fundraising process.</h3>
+          <p class="text-sm muted mt-2">You're being added to our national waitlist. Here's how we'll keep you in the loop as we move forward together.</p>
 
           <div class="grid md:grid-cols-2 gap-5 mt-6">
             <div>
@@ -872,7 +873,7 @@ function selectPathway(p){
     $('#pathwayConfirmText').textContent = pathwayLabel(state.pathway);
     const pct = pathwayPct(state.pathway);
     $('#pathwaySavingsText').textContent = pct > 0
-      ? `${(pct*100).toFixed(0)}% off, applied in perpetuity`
+      ? `${(pct*100).toFixed(0)}% off, for the life of the contract`
       : 'No discount, but we do the fundraising';
   } else {
     $('#pathwayConfirm').classList.add('hidden');
@@ -1235,7 +1236,7 @@ function copySummary(){
     '  • Tranche 4 (end of Year 2, prepays Year 3): ' + fmt(y3),
     '  • 3-Year Total: ' + fmt(total3yr) + (savings > 0 ? ' (' + fmt(savings) + ' saved)' : ''),
     '',
-    'COMMITMENT: By end of Year 3, ' + branch + ' is self-sufficient — no further donor dollars required.',
+    'INTENT: By end of Year 3, PM will have provided ' + branch + ' with a customized plan and the tools to sustain the program long-term.',
     pathwaySpecific
   ].filter(x => x !== null).join('\n');
 
@@ -1369,11 +1370,12 @@ function openCalculator(){
 
 /* ===================== Open Board Brief ===================== */
 function openBoardBrief(){
-  const { totalPct, total3yr } = totals();
+  const { totalPct, total3yr, y2 } = totals();
   const branch    = $('#branchName').value.trim() || '';
   const pathway   = pathwayLabel(state.pathway);
   const discount  = (totalPct*100).toFixed(0) + '%';
   const total     = fmt(total3yr);
+  const renewal   = fmt(Math.round(y2));
   const boardDateVal = $('#boardMeetingDate').value;
   const boardDate = boardDateVal
     ? new Date(boardDateVal + 'T00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
@@ -1384,6 +1386,7 @@ function openBoardBrief(){
   params.set('pathway', pathway);
   params.set('discount', discount);
   params.set('total', total);
+  params.set('renewal', renewal);
   window.open('board-summary(1).html?' + params.toString(), '_blank');
 }
 
@@ -1476,13 +1479,13 @@ renderTracker();
         <tr>
           <td><strong>Tranche 4</strong> — Year 3 prepay</td>
           <td>End of Year 2</td>
-          <td>Year 3 sustain — final guided year before self-sufficiency</td>
+          <td>Year 3 sustain — final guided year of the partnership</td>
           <td class="right" id="pv-t4">—</td>
         </tr>
         <tr class="pv-total-row">
           <td><strong>3-Year Total</strong></td>
           <td>—</td>
-          <td>Then nothing. Your branch runs the program on its own revenue.</td>
+          <td>Completes your 3-year guided partnership with Practicing Musician.</td>
           <td class="right" id="pv-t-total">—</td>
         </tr>
       </tbody>
@@ -1493,20 +1496,20 @@ renderTracker();
   <div class="pv-card" style="margin-bottom:10px">
     <div class="pv-section-label">The Model · One Commitment, Permanent Impact</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
-      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px">
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px;min-width:0">
         <div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#999">Year 1 · Build &amp; launch</div>
         <div style="font-size:13px;font-weight:800;color:#1B2F4E;margin-top:3px">Funded in</div>
         <div style="font-size:9px;color:#666;margin-top:4px">Onboarding, the 5-week flagship class, full curriculum, and rollout across branch programs.</div>
       </div>
-      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px">
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px;min-width:0">
         <div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#999">Years 2–3 · Sustain</div>
         <div style="font-size:13px;font-weight:800;color:#1B2F4E;margin-top:3px">Still funded</div>
         <div style="font-size:9px;color:#666;margin-top:4px">Curriculum, facilitator support, and platform — while branch revenue ramps up underneath it.</div>
       </div>
-      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px">
+      <div style="border:1px solid #e5e7eb;border-radius:6px;padding:10px 12px;min-width:0">
         <div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#999">Year 4 onward</div>
-        <div style="font-size:13px;font-weight:800;color:#B87333;margin-top:3px">Self-sustaining</div>
-        <div style="font-size:9px;color:#666;margin-top:4px">The program runs on its own membership, class, and lesson revenue. No future asks, ever.</div>
+        <div style="font-size:13px;font-weight:800;color:#B87333;margin-top:3px">Long-term equipped</div>
+        <div style="font-size:9px;color:#666;margin-top:4px">Your branch has the tools, the plan, and the revenue framework. What you do with it is yours to decide.</div>
       </div>
     </div>
   </div>
@@ -1518,8 +1521,8 @@ renderTracker();
       <div id="pv-next-content"></div>
     </div>
     <div class="pv-band" style="display:flex;flex-direction:column;justify-content:center">
-      <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#B87333;margin-bottom:7px">PM's Commitment</div>
-      <p style="margin:0;font-size:9.5px;color:#f8fafc">By the end of Year 3, <strong class="pv-teal" id="pv-commit-branch">your branch</strong> will be fully self-sufficient — generating enough revenue from membership lift, group classes, and lesson commissions that <strong class="pv-teal">no future donor dollars are required. Ever.</strong></p>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#B87333;margin-bottom:7px">PM's Intent</div>
+      <p style="margin:0;font-size:9.5px;color:#f8fafc">By the end of Year 3, PM will have given <strong class="pv-teal" id="pv-commit-branch">your branch</strong> a customized plan, the tools, and the revenue framework to sustain the program long-term. <strong class="pv-teal">How your branch puts it to work is yours to decide.</strong></p>
     </div>
   </div>
 

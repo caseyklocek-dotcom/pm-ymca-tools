@@ -189,7 +189,7 @@
     </div>
 
     <h1>Music at <span class="fill">[BRANCH NAME]</span> — what we're asking the board to approve.</h1>
-    <p class="sub">A one-time, three-year investment that leaves the branch running a self-funding music program. No annual fundraising after onboarding.</p>
+    <p class="sub">A three-year funded launch that transitions to a <span class="fill">[YEAR 4 RENEWAL]</span>/yr annual renewal at Year 4 — structured to be covered by program revenue.</p>
 
     <!-- THE DECISION -->
     <div class="decision">
@@ -198,7 +198,7 @@
         Approve a <span class="fill">[PATHWAY]</span> investment of
         <span class="fill">[YOUR 3-YEAR TOTAL]</span> over three years
         (a <span class="fill">[DISCOUNT]</span> discount off the standard $300,000)
-        to launch music at <span class="fill">[BRANCH NAME]</span> and make it self-sustaining by Year&nbsp;4.
+        to launch music at <span class="fill">[BRANCH NAME]</span> and transition to a <span class="fill">[YEAR 4 RENEWAL]</span>/yr annual renewal starting Year&nbsp;4.
       </div>
     </div>
 
@@ -208,7 +208,7 @@
       <div class="phases">
         <div class="phase">
           <div class="yr">Year 1 · Build &amp; launch</div>
-          <div class="amt">Funded in</div>
+          <div class="amt">Funded</div>
           <div class="d">Onboarding, the 5-week flagship class, full curriculum, and rollout across branch programs.</div>
         </div>
         <div class="phase">
@@ -218,8 +218,8 @@
         </div>
         <div class="phase">
           <div class="yr">Year 4 onward</div>
-          <div class="amt copper">Self-sustaining</div>
-          <div class="d">The program runs on its own membership, class, and lesson revenue. No future asks, ever.</div>
+          <div class="amt copper">Branch-Funded</div>
+          <div class="d">The branch pays <span class="fill">[YEAR 4 RENEWAL]</span>/yr. Our intent: by Year 3, you'll have a customized plan and the revenue framework to sustain the program long-term.</div>
         </div>
       </div>
     </div>
@@ -263,7 +263,7 @@
       <ul class="tight">
         <li><b>Mission.</b> Music is a high-demand, high-retention youth and family program that deepens membership engagement — delivered with the Y's existing space and volunteer base.</li>
         <li><b>Financial.</b> It is structured to become a revenue source, not a recurring cost line — membership lift, group classes, and lesson commissions fund it from Year&nbsp;4 on.</li>
-        <li><b>Risk.</b> The model is already proven in a live YMCA pilot, and the discount on this pathway is locked in perpetuity.</li>
+        <li><b>Risk.</b> The model is already proven in a live YMCA pilot, and the discount on this pathway is locked for the life of the contract.</li>
       </ul>
     </div>
 
@@ -294,6 +294,7 @@
   fillParam('[PATHWAY]',           p.get('pathway'));
   fillParam('[DISCOUNT]',          p.get('discount'));
   fillParam('[YOUR 3-YEAR TOTAL]', p.get('total'));
+  fillParam('[YEAR 4 RENEWAL]',    p.get('renewal'));
   fillParam('[BOARD MEETING DATE]', p.get('boardDate'));
   var today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   fillParam('[DATE]', today);
